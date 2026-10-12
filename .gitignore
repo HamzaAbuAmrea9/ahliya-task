@@ -1,0 +1,16 @@
+[Dd]ebug/
+[Rr]elease/
+bin/
+obj/
+.vs/
+*.user
+TestResults/
+
+node_modules/
+www/
+.android/
+.ionic/
+
+*.log
+.DS_Store
+Thumbs.db

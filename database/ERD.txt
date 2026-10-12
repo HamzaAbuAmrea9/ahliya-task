@@ -1,0 +1,15 @@
+AhliyaDb
+========
+Roles 1---N Users
+Roles N---M Menus through RoleMenus
+Users 1---N RefreshTokens
+Users 1---N UserDevices
+Users 1---N PasswordChangeLogs
+
+
+Flows:
+- Login checks Users.IsActive + BCrypt, writes RefreshTokens row
+- my-menu joins RoleMenus + Menus where IsActive=1 ordered by SortOrder
+- Change password updates Users.PasswordHash + inserts PasswordChangeLogs
+- Logout revokes RefreshTokens
+- FaceID enable upserts UserDevices(BiometricEnabled=1)
