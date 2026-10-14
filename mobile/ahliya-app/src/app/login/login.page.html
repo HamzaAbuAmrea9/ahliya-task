@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div style="text-align:center;margin:30px 0">
+    <ion-icon name="person-circle" style="font-size:80px;color:var(--ion-color-primary)"></ion-icon>
+    <h2>Welcome</h2>
+  </div>
+
+  <ion-item>
+    <ion-label position="floating">Email</ion-label>
+    <ion-input [(ngModel)]="email" type="email"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Password</ion-label>
+    <ion-input [(ngModel)]="password" [type]="showPass ? 'text' : 'password'"></ion-input>
+    <ion-icon [name]="showPass ? 'eye-off' : 'eye'" slot="end" (click)="showPass = !showPass"></ion-icon>
+  </ion-item>
+
+  <ion-button expand="block" (click)="doLogin()" style="margin-top:20px">Login</ion-button>
+
+  <ion-button expand="block" fill="outline" *ngIf="hasBiometric" (click)="faceLogin()" style="margin-top:10px">
+    <ion-icon name="happy" slot="start"></ion-icon>
+    Login with Face ID
+  </ion-button>
+</ion-content>
