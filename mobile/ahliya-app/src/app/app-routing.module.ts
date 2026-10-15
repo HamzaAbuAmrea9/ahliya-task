@@ -6,6 +6,10 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule) },
   { path: 'home', loadChildren: () => import('./home/home.module').then(m => m.HomePageModule), canActivate: [authGuard] },
+  { path: 'change-password', loadChildren: () => import('./change-password/change-password.module').then(m => m.ChangePasswordPageModule), canActivate: [authGuard] },
+  { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersPageModule), canActivate: [authGuard] },
+  { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardPageModule), canActivate: [authGuard] },
+  { path: 'reports', loadChildren: () => import('./reports/reports.module').then(m => m.ReportsPageModule), canActivate: [authGuard] },
 ];
 
 @NgModule({
