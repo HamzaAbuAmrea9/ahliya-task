@@ -1,0 +1,58 @@
+@host = http://localhost:5200
+@token = paste-access-token-here
+
+### Login (super@test.com / admin@test.com / user@test.com - password 123456)
+# @name login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@test.com",
+  "password": "123456"
+}
+
+### Get my menu (dynamic per role)
+# @name myMenu
+GET {{host}}/api/menu/my-menu
+Authorization: Bearer {{token}}
+
+### List users (Admin and SuperAdmin only)
+# @name users
+GET {{host}}/api/users
+Authorization: Bearer {{token}}
+
+### Change password
+POST {{host}}/api/auth/change-password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "oldPassword": "123456",
+  "newPassword": "654321"
+}
+
+### Refresh token
+POST {{host}}/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "paste-refresh-token-here"
+}
+
+### Logout
+POST {{host}}/api/auth/logout
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "refreshToken": "paste-refresh-token-here"
+}
+
+### Enable biometric login for device
+POST {{host}}/api/auth/enable-biometric
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "deviceId": "my-phone-1"
+}
