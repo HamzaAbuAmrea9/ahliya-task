@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { Preferences } from '@capacitor/preferences';
 import { environment } from '../../environments/environment';
 
@@ -64,24 +65,24 @@ export class AuthService {
     return new HttpHeaders({ Authorization: `Bearer ${t}` });
   }
 
-  async myMenu() {
+  async myMenu(): Promise<MenuItem[]> {
     const h = await this.headers();
-    return this.http.get<MenuItem[]>(`${this.base}/menu/my-menu`, { headers: h }).toPromise();
+    return firstValueFrom(this.http.get<MenuItem[]>(`${this.base}/menu/my-menu`, { headers: h }));
   }
 
   async changePassword(oldPassword: string, newPassword: string) {
     const h = await this.headers();
-    return this.http.post(`${this.base}/auth/change-password`, { oldPassword, newPassword }, { headers: h }).toPromise();
+    return firstValueFrom(this.http.post(`${this.base}/auth/change-password`, { oldPassword, newPassword }, { headers: h }));
   }
 
-  async getUsers() {
+  async getUsers(): Promise<any[]> {
     const h = await this.headers();
-    return this.http.get<any[]>(`${this.base}/users`, { headers: h }).toPromise();
+    return firstValueFrom(this.http.get<any[]>(`${this.base}/users`, { headers: h }));
   }
 
   async enableBiometric(deviceId: string) {
     const h = await this.headers();
-    return this.http.post(`${this.base}/auth/enable-biometric`, { deviceId }, { headers: h }).toPromise();
+    return firstValueFrom(this.http.post(`${this.base}/auth/enable-biometric`, { deviceId }, { headers: h }));
   }
 
   async logout() {
@@ -90,7 +91,7 @@ export class AuthService {
     const bioPass = (await Preferences.get({ key: 'biometric_pass' })).value;
     const h = await this.headers();
     try {
-      await this.http.post(`${this.base}/auth/logout`, { refreshToken: refresh }, { headers: h }).toPromise();
+      await firstValueFrom(this.http.post(`${this.base}/auth/logout`, { refreshToken: refresh }, { headers: h }));
     } catch {}
     await Preferences.clear();
     if (bioEmail) await Preferences.set({ key: 'biometric_email', value: bioEmail });

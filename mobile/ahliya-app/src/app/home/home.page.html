@@ -11,12 +11,12 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h3>Hello {{ name }}</h3>
-  <p>{{ role }}</p>
+  <h3>Hello {{ name() }}</h3>
+  <p>{{ role() }}</p>
 
   <ion-grid>
     <ion-row>
-      <ion-col size="6" *ngFor="let m of menus">
+      <ion-col size="6" *ngFor="let m of menus()">
         <ion-card (click)="open(m.route)" style="text-align:center">
           <ion-card-content>
             <ion-icon [name]="m.icon" style="font-size:36px"></ion-icon>

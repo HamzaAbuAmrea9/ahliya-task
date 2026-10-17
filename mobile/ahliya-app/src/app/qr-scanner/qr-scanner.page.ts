@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 
@@ -9,8 +9,8 @@ import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
   standalone: false,
 })
 export class QrScannerPage {
-  result = '';
-  history: string[] = [];
+  result = signal('');
+  history = signal<string[]>([]);
 
   constructor(private toast: ToastController) {}
 
@@ -22,8 +22,8 @@ export class QrScannerPage {
       }
       const res = await BarcodeScanner.scan();
       if (res.barcodes.length > 0) {
-        this.result = res.barcodes[0].displayValue || '';
-        this.history.unshift(this.result);
+        this.result.set(res.barcodes[0].displayValue || '');
+        this.history.update(h => [this.result(), ...h]);
       } else {
         this.msg('Nothing found');
       }
@@ -38,8 +38,8 @@ export class QrScannerPage {
   }
 
   clear() {
-    this.result = '';
-    this.history = [];
+    this.result.set('');
+    this.history.set([]);
   }
 
   async msg(t: string) {

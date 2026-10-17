@@ -23,7 +23,7 @@
 
   <ion-button expand="block" (click)="doLogin()" style="margin-top:20px">Login</ion-button>
 
-  <ion-button expand="block" fill="outline" *ngIf="hasBiometric" (click)="faceLogin()" style="margin-top:10px">
+  <ion-button expand="block" fill="outline" *ngIf="hasBiometric()" (click)="faceLogin()" style="margin-top:10px">
     <ion-icon name="happy" slot="start"></ion-icon>
     Login with Face ID
   </ion-button>

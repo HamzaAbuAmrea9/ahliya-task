@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, MenuItem } from '../services/auth.service';
 
@@ -9,19 +9,19 @@ import { AuthService, MenuItem } from '../services/auth.service';
   standalone: false,
 })
 export class HomePage {
-  name = '';
-  role = '';
-  menus: MenuItem[] = [];
+  name = signal('');
+  role = signal('');
+  menus = signal<MenuItem[]>([]);
 
   constructor(private auth: AuthService, private router: Router) {}
 
   async ionViewWillEnter() {
-    this.name = await this.auth.getName();
-    this.role = await this.auth.getRole();
-    this.menus = await this.auth.getMenus();
-    if (this.menus.length === 0) {
+    this.name.set(await this.auth.getName());
+    this.role.set(await this.auth.getRole());
+    this.menus.set(await this.auth.getMenus());
+    if (this.menus().length === 0) {
       const fresh = await this.auth.myMenu().catch(() => null);
-      if (fresh) this.menus = fresh;
+      if (fresh) this.menus.set(fresh);
     }
   }
 

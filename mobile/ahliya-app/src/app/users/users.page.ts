@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -8,18 +8,18 @@ import { AuthService } from '../services/auth.service';
   standalone: false,
 })
 export class UsersPage {
-  users: any[] = [];
-  loading = true;
+  users = signal<any[]>([]);
+  loading = signal(true);
 
   constructor(private auth: AuthService) {}
 
   async ionViewWillEnter() {
-    this.loading = true;
+    this.loading.set(true);
     try {
-      this.users = (await this.auth.getUsers()) || [];
+      this.users.set((await this.auth.getUsers()) || []);
     } catch {
-      this.users = [];
+      this.users.set([]);
     }
-    this.loading = false;
+    this.loading.set(false);
   }
 }

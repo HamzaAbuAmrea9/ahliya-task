@@ -1,14 +1,14 @@
 <ion-app>
-  <ion-menu contentId="main" *ngIf="menus.length > 0">
+  <ion-menu contentId="main" *ngIf="menus().length > 0">
     <ion-header>
       <ion-toolbar color="primary">
-        <ion-title>{{ userName }}</ion-title>
+        <ion-title>{{ userName() }}</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-note class="ion-padding">{{ role }}</ion-note>
+      <ion-note class="ion-padding">{{ role() }}</ion-note>
       <ion-list>
-        <ion-menu-toggle *ngFor="let m of menus">
+        <ion-menu-toggle *ngFor="let m of menus()">
           <ion-item (click)="go(m.route)">
             <ion-icon [name]="m.icon" slot="start"></ion-icon>
             <ion-label>{{ m.title }}</ion-label>

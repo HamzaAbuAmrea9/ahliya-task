@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Preferences } from '@capacitor/preferences';
 import { NativeBiometric } from '@capgo/capacitor-native-biometric';
+import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -11,11 +12,11 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./login.page.scss'],
   standalone: false,
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
   email = '';
   password = '';
   showPass = false;
-  hasBiometric = false;
+  hasBiometric = signal(false);
 
   constructor(
     private auth: AuthService,
@@ -24,9 +25,9 @@ export class LoginPage implements OnInit {
     private toast: ToastController
   ) {}
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
     const saved = (await Preferences.get({ key: 'biometric_email' })).value;
-    this.hasBiometric = !!saved;
+    this.hasBiometric.set(!!saved);
     if (await this.auth.isLoggedIn()) this.router.navigateByUrl('/home');
   }
 
@@ -38,7 +39,7 @@ export class LoginPage implements OnInit {
     const l = await this.loading.create({ message: 'Login...' });
     await l.present();
     try {
-      const res = await this.auth.login(this.email, this.password).toPromise();
+      const res = await firstValueFrom(this.auth.login(this.email, this.password));
       await this.auth.saveSession(res!);
       window.dispatchEvent(new Event('ahliya-menu'));
       l.dismiss();

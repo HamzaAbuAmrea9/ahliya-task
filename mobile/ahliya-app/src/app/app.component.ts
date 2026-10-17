@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, MenuItem } from './services/auth.service';
 
@@ -9,9 +9,9 @@ import { AuthService, MenuItem } from './services/auth.service';
   standalone: false,
 })
 export class AppComponent {
-  menus: MenuItem[] = [];
-  userName = '';
-  role = '';
+  menus = signal<MenuItem[]>([]);
+  userName = signal('');
+  role = signal('');
 
   constructor(private auth: AuthService, private router: Router, private zone: NgZone) {
     window.addEventListener('ahliya-menu', () => this.zone.run(() => this.load()));
@@ -20,13 +20,13 @@ export class AppComponent {
 
   async load() {
     if (await this.auth.isLoggedIn()) {
-      this.menus = await this.auth.getMenus();
-      this.userName = await this.auth.getName();
-      this.role = await this.auth.getRole();
+      this.menus.set(await this.auth.getMenus());
+      this.userName.set(await this.auth.getName());
+      this.role.set(await this.auth.getRole());
     } else {
-      this.menus = [];
-      this.userName = '';
-      this.role = '';
+      this.menus.set([]);
+      this.userName.set('');
+      this.role.set('');
     }
   }
 
@@ -36,7 +36,8 @@ export class AppComponent {
 
   async logout() {
     await this.auth.logout();
-    this.menus = [];
+    this.menus.set([]);
+    window.dispatchEvent(new Event('ahliya-menu'));
     this.router.navigateByUrl('/login');
   }
 }

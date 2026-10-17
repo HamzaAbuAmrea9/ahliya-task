@@ -8,10 +8,10 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-spinner *ngIf="loading"></ion-spinner>
+  <ion-spinner *ngIf="loading()"></ion-spinner>
 
-  <ion-list *ngIf="!loading">
-    <ion-item *ngFor="let u of users">
+  <ion-list *ngIf="!loading()">
+    <ion-item *ngFor="let u of users()">
       <ion-icon name="person" slot="start"></ion-icon>
       <ion-label>
         <h2>{{ u.fullName }}</h2>
@@ -21,5 +21,5 @@
     </ion-item>
   </ion-list>
 
-  <p *ngIf="!loading && users.length === 0">No users found.</p>
+  <p *ngIf="!loading() && users().length === 0">No users found.</p>
 </ion-content>

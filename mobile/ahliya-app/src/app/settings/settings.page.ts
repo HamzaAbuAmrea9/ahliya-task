@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { Preferences } from '@capacitor/preferences';
 import { NativeBiometric } from '@capgo/capacitor-native-biometric';
@@ -10,19 +10,19 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./settings.page.scss'],
   standalone: false,
 })
-export class SettingsPage implements OnInit {
-  enabled = false;
+export class SettingsPage {
+  enabled = signal(false);
   email = '';
   password = '';
 
   constructor(private auth: AuthService, private toast: ToastController) {}
 
-  async ngOnInit() {
-    this.enabled = !!(await Preferences.get({ key: 'biometric_email' })).value;
+  async ionViewWillEnter() {
+    this.enabled.set(!!(await Preferences.get({ key: 'biometric_email' })).value);
   }
 
   async toggle() {
-    if (!this.enabled) {
+    if (!this.enabled()) {
       await Preferences.remove({ key: 'biometric_email' });
       await Preferences.remove({ key: 'biometric_pass' });
       this.msg('Face login disabled');
@@ -30,14 +30,14 @@ export class SettingsPage implements OnInit {
     }
     if (!this.email || !this.password) {
       this.msg('Enter email and password to enable');
-      this.enabled = false;
+      this.enabled.set(false);
       return;
     }
     try {
       const avail = await NativeBiometric.isAvailable();
       if (!avail.isAvailable) {
         this.msg('Biometric not available');
-        this.enabled = false;
+        this.enabled.set(false);
         return;
       }
       await NativeBiometric.verifyIdentity({ reason: 'Enable face login' });
@@ -46,7 +46,7 @@ export class SettingsPage implements OnInit {
       await this.auth.enableBiometric('mobile-device').catch(() => {});
       this.msg('Face login enabled');
     } catch {
-      this.enabled = false;
+      this.enabled.set(false);
       this.msg('Failed to enable');
     }
   }
