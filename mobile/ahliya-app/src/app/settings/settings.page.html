@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item>
+      <ion-label>Face ID Login</ion-label>
+      <ion-toggle [(ngModel)]="enabled" (ionChange)="toggle()"></ion-toggle>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="enabled">
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input [(ngModel)]="email" type="email"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input [(ngModel)]="password" type="password"></ion-input>
+    </ion-item>
+    <p style="font-size:12px;color:gray">Enter your login once to link it with Face ID.</p>
+  </div>
+</ion-content>

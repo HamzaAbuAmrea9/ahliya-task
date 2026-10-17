@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Scan QR</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-button expand="block" (click)="scan()">
+    <ion-icon name="qr-code" slot="start"></ion-icon>
+    Start Scan
+  </ion-button>
+
+  <ion-card *ngIf="result">
+    <ion-card-header>
+      <ion-card-title>Result</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ result }}</p>
+      <ion-button size="small" (click)="copy(result)">Copy</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list *ngIf="history.length > 0">
+    <ion-list-header>History</ion-list-header>
+    <ion-item *ngFor="let h of history" (click)="copy(h)">
+      <ion-label>{{ h }}</ion-label>
+      <ion-icon name="copy" slot="end"></ion-icon>
+    </ion-item>
+    <ion-button fill="clear" (click)="clear()">Clear</ion-button>
+  </ion-list>
+</ion-content>
